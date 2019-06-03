@@ -21,17 +21,6 @@ console.log(age);
 foo();
 console.log(age);
 
-
-
-
-
-
-
-
-
-
-
-
 ///////////////////////////////////////
 // Lecture: Scoping
 
@@ -77,14 +66,36 @@ function third() {
 }
 */
 
-
+ 
 
 ///////////////////////////////////////
 // Lecture: The this keyword
 
+let john = {
+    name: 'john',
+    yearofBirth:1990,
+    calculateAge: function () {
+        console.log(this);
+        console.log(2016- this.yearofBirth);
 
+        // function innerFunction(){
+        //     console.log(this);
+        // }
+        // innerFunction();
+    }
+}
 
+let name = john.calculateAge();
 
+let mike = {
+    name: 'mike',
+    yearofBirth: 1984
+};
+
+//borrow
+
+mike.calculateAge = john.calculateAge();
+mike.calculateAge();
 
 
 
