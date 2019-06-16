@@ -10,17 +10,28 @@ GAME RULES:
 */
 
 
-let scores,roundScore,activePlayer,dice;
+let scores,roundScore,activePlayer;
 
 scores = [0,0];
 roundScore = 0;
 activePlayer = 0;
-dice = Math.floor(Math.random() * 6) + 1;
-console.log('dice',dice);
-
-document.querySelector('#current-' + activePlayer).textContent = dice;
-// document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>';
-
-let x = document.querySelector('#score-0').textContent;
 
 document.querySelector('.dice').style.display = 'none';
+document.getElementById('score-0').textContent = '0';
+document.getElementById('current-0').textContent = '0';
+document.getElementById('score-1').textContent = '0';
+document.getElementById('current-1').textContent = '0';
+
+
+Document.querySelector('.btn-roll').addEventListener('click',function(){
+// 1- Random number
+ var dice = Math.floor(Math.random() * 6) + 1;
+
+// 2- display the result 
+
+let diceDOM = document.querySelector('.dice');
+diceDOM.style.display = 'block';
+diceDOM.src = 'dice-' + dice + '.png';
+
+// 3.Update the round socre if the rolled number was not a 1 
+})
