@@ -11,23 +11,32 @@ GAME RULES:
 
 
 var scores, roundScore, activePlayer, gamePlaying;
+let scoreToWin = 100;
+let timeRolls = 0;
 
 init();
 
 
 document.querySelector('.btn-roll').addEventListener('click', function() {
-    if(gamePlaying) {
+    if (gamePlaying) {
         // 1. Random number
+        let dices = [0, 0];
         var dice = Math.floor(Math.random() * 6) + 1;
-
+        let diceTwo = Math.floor(Math.random() * 6) + 1;
+        dices[0] = dice;
+        dices[1] = diceTwo;
         //2. Display the result
-        var diceDOM = document.querySelector('.dice');
+        let diceDOM = document.querySelector('.dice');
         diceDOM.style.display = 'block';
         diceDOM.src = 'dice-' + dice + '.png';
 
+        let diceTwoDOM = document.querySelector('.dice-two');
+        diceTwoDOM.style.display = 'block';
+        diceTwoDOM.src = 'dice-' + dice + '.png';
+
 
         //3. Update the round score IF the rolled number was NOT a 1
-        if (dice !== 1) {
+        if (dice !== 1 || diceTwo !== 1) {
             //Add score
             roundScore += dice;
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
@@ -35,7 +44,25 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
             //Next player
             nextPlayer();
         }
-    }    
+
+        // if two 6 in a row // 
+        if (dice == 6 || diceTwo == 6 || dice == 6 && diceTwo == 6) {
+            timeRolls++;
+            roundScore += dice;
+            roundScore += diceTwo;
+
+            document.querySelector('#current-' + activePlayer).textContent = roundScore;
+            console.log('6 first time-->', timeRolls);
+        }
+        // loose all points // 
+        if (timeRolls == 2) {
+            console.log('2 times 6 in a row', timeRolls);
+            document.getElementById('current-' + activePlayer).textContent = '0';
+            document.getElementById('score-' + activePlayer).textContent = '0';
+            timeRolls = 0;
+            nextPlayer();
+        }
+    }
 });
 
 
@@ -48,7 +75,7 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
         // Check if player won the game
-        if (scores[activePlayer] >= 20) {
+        if (scores[activePlayer] >= scoreToWin) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             document.querySelector('.dice').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
@@ -73,10 +100,9 @@ function nextPlayer() {
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
 
-    //document.querySelector('.player-0-panel').classList.remove('active');
-    //document.querySelector('.player-1-panel').classList.add('active');
-
     document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.dice-two').style.display = 'none';
+
 }
 
 document.querySelector('.btn-new').addEventListener('click', init);
@@ -86,7 +112,7 @@ function init() {
     activePlayer = 0;
     roundScore = 0;
     gamePlaying = true;
-    
+    scoreToWin = 100;
     document.querySelector('.dice').style.display = 'none';
 
     document.getElementById('score-0').textContent = '0';
@@ -100,4 +126,34 @@ function init() {
     document.querySelector('.player-0-panel').classList.remove('active');
     document.querySelector('.player-1-panel').classList.remove('active');
     document.querySelector('.player-0-panel').classList.add('active');
+
 }
+
+
+
+/* modalbox*/
+let modal = document.getElementById('myModal');
+let btnModal = document.getElementById('myBtn');
+let closeModal = document.getElementsByClassName('close')[0];
+
+btnModal.onclick = function() {
+    modal.style.display = 'block';
+    document.getElementById('score-val').value = scoreToWin;
+}
+
+closeModal.onclick = function() {
+    modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+
+//change score
+function scoreChange() {
+    scoreToWin = document.getElementById('score-val').value;
+}
+
+document.querySelector('.btn-changeScore').addEventListener('click', scoreChange);
