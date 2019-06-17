@@ -32,13 +32,13 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 
         let diceTwoDOM = document.querySelector('.dice-two');
         diceTwoDOM.style.display = 'block';
-        diceTwoDOM.src = 'dice-' + dice + '.png';
+        diceTwoDOM.src = 'dice-' + diceTwo + '.png';
 
 
         //3. Update the round score IF the rolled number was NOT a 1
         if (dice !== 1 || diceTwo !== 1) {
             //Add score
-            roundScore += dice;
+            roundScore += dice + diceTwo;
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
         } else {
             //Next player
@@ -57,6 +57,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         // loose all points // 
         if (timeRolls == 2) {
             console.log('2 times 6 in a row', timeRolls);
+            scores[activePlayer] = 0;
             document.getElementById('current-' + activePlayer).textContent = '0';
             document.getElementById('score-' + activePlayer).textContent = '0';
             timeRolls = 0;
